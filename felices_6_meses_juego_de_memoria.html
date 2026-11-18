@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎀 Felices 6 Meses 🎀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables CSS y tema Aesthetic Hello Kitty */
+        :root {
+            --hk-pink-light: #ffd1dc;
+            --hk-pink-medium: #ffb6c1;
+            --hk-pink-dark: #ff69b4;
+            --hk-pink-hot: #ff1493;
+            --hk-red: #ff0000;
+            --hk-white: #ffffff;
+            --hk-text: #5a3a46;
+            --font-title: 'Fredoka One', cursive;
+            --font-body: 'Quicksand', sans-serif;
+            --card-size: clamp(64px, 20vw, 100px);
+            --card-gap: clamp(8px, 2.5vw, 15px);
+        }
+
+        /* Reset y estilos base */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: linear-gradient(135deg, var(--hk-pink-light) 0%, var(--hk-white) 100%);
+            color: var(--hk-text);
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Corazones flotantes de fondo */
+        #floating-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .floating-heart {
+            position: absolute;
+            color: var(--hk-pink-medium);
+            opacity: 0.5;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Contenedor principal */
+        main {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 0.75rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 1.25rem;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 0.85rem 1.25rem;
+            border-radius: 25px;
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.2);
+            border: 3px dashed var(--hk-pink-medium);
+            width: 100%;
+        }
+
+        h1 {
+            font-family: var(--font-title);
+            color: var(--hk-pink-hot);
+            font-size: clamp(1.5rem, 6.5vw, 2.3rem);
+            text-shadow: 2px 2px 0px var(--hk-white), 4px 4px 0px var(--hk-pink-light);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+            font-weight: bold;
+            color: var(--hk-pink-dark);
+        }
+
+        .stats-container span {
+            background: var(--hk-white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* Tablero de cartas */
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--card-gap);
+            perspective: 1000px;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: calc((var(--card-size) * 4) + (var(--card-gap) * 3));
+            justify-items: center;
+        }
+
+        .card {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1);
+            border-radius: 14px;
+            touch-action: manipulation;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            transform: rotateY(180deg) scale(0.95);
+            animation: matchPulse 0.5s ease-in-out;
+            cursor: default;
+        }
+
+        @keyframes matchPulse {
+            0% { transform: rotateY(180deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); box-shadow: 0 0 20px var(--hk-pink-hot); }
+            100% { transform: rotateY(180deg) scale(0.95); }
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 14px;
+            box-shadow: 0 6px 15px rgba(255, 105, 180, 0.3);
+            font-size: clamp(1.8rem, 7vw, 2.5rem);
+            user-select: none;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, var(--hk-pink-hot), var(--hk-pink-medium));
+            border: 3px solid var(--hk-white);
+            transform: rotateY(0deg);
+        }
+
+        .card-back::after {
+            content: '🎀';
+            font-size: clamp(1.4rem, 5.5vw, 2rem);
+            opacity: 0.85;
+        }
+
+        .card-front {
+            background-color: var(--hk-white);
+            border: 3px solid var(--hk-pink-light);
+            transform: rotateY(180deg);
+        }
+
+        .btn-restart {
+            background: var(--hk-pink-hot);
+            color: var(--hk-white);
+            border: none;
+            padding: 12px 26px;
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-family: var(--font-title);
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--hk-pink-dark);
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 var(--hk-pink-dark);
+        }
+
+        .btn-restart:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 var(--hk-pink-dark);
+        }
+
+        /* Canvas de confeti */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Pantalla final y sobre animado */
+        .end-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background: rgba(255, 182, 193, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .end-screen.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .end-title {
+            font-family: var(--font-title);
+            color: var(--hk-white);
+            font-size: clamp(2.2rem, 9vw, 3rem);
+            text-shadow: 2px 2px 10px var(--hk-pink-hot);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 280px;
+            height: 186px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            touch-action: manipulation;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.03);
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--hk-pink-hot);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 40px rgba(255, 20, 147, 0.4);
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--hk-pink-dark);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 102px solid var(--hk-pink-medium);
+            z-index: 4;
+            transform-origin: top;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+        }
+
+        .envelope-front {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid var(--hk-pink-hot);
+            border-right: 140px solid var(--hk-pink-hot);
+            border-bottom: 93px solid var(--hk-pink-dark);
+            border-top: 93px solid transparent;
+            z-index: 3;
+            border-radius: 0 0 10px 10px;
+            pointer-events: none;
+        }
+
+        .seal {
+            position: absolute;
+            top: 82px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.3rem;
+            z-index: 5;
+            transition: opacity 0.3s;
+        }
+
+        /* Carta interior */
+        .letter {
+            position: absolute;
+            bottom: 0;
+            left: 4%;
+            width: 92%;
+            height: 90%;
+            background-color: #fff9fa;
+            border-radius: 12px;
+            z-index: 2; 
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), height 0.8s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 18px 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border: 2px dashed var(--hk-pink-light);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .letter::-webkit-scrollbar { width: 6px; }
+        .letter::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 5px; }
+        .letter::-webkit-scrollbar-thumb { background: var(--hk-pink-medium); border-radius: 5px; }
+
+        .letter-content {
+            opacity: 0;
+            transition: opacity 0.5s 0.8s; 
+            text-align: center;
+            width: 100%;
+        }
+
+        .letter h2 {
+            font-family: var(--font-title);
+            color: #ff2a75;
+            text-shadow: 2px 2px 4px #ffb3c6;
+            font-size: clamp(1.2rem, 5vw, 1.45rem);
+            margin-bottom: 12px;
+        }
+
+        .letter p {
+            font-size: 14px;
+            line-height: 1.55;
+            color: #d6336c;
+        }
+
+        /* Apartado especial de regalo */
+        .gift-box {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: linear-gradient(135deg, #ffe6ee 0%, #ffd1dc 100%);
+            border: 2px dashed var(--hk-pink-dark);
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.25);
+            animation: softGlow 2.2s infinite alternate;
+        }
+
+        .gift-title {
+            font-family: var(--font-title);
+            font-size: 15px;
+            color: var(--hk-pink-hot);
+            letter-spacing: 0.5px;
+        }
+
+        /* Contenedor tipo tarjeta raspa y gana */
+        .scratch-container {
+            position: relative;
+            margin-top: 10px;
+            width: 100%;
+            min-height: 76px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1.5px solid var(--hk-pink-medium);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .gift-message {
+            padding: 12px 10px;
+            font-family: monospace;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.45;
+            color: var(--hk-text);
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+            user-select: all;
+            -webkit-user-select: all;
+        }
+
+        .gift-subtext {
+            margin-top: 4px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--hk-pink-hot);
+            text-align: center;
+            width: 100%;
+            z-index: 1;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .gift-secret-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 8px;
+            width: 100%;
+            z-index: 1;
+        }
+
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            cursor: pointer;
+            touch-action: none;
+            transition: opacity 0.6s ease;
+        }
+
+        #scratch-canvas.revealed {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes softGlow {
+            0% {
+                box-shadow: 0 3px 10px rgba(255, 105, 180, 0.2);
+                transform: scale(1);
+            }
+            100% {
+                box-shadow: 0 6px 18px rgba(255, 20, 147, 0.45);
+                transform: scale(1.03);
+            }
+        }
+
+        .envelope-wrapper.open .flap {
+            transform: rotateX(180deg);
+            z-index: 1; 
+        }
+
+        .envelope-wrapper.open .seal {
+            opacity: 0; 
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-115px); 
+            height: min(390px, 66dvh); 
+            z-index: 10; 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+        }
+
+        .envelope-wrapper.open .letter-content {
+            opacity: 1;
+        }
+
+        .instruction {
+            margin-top: 1.75rem;
+            font-weight: bold;
+            font-size: 0.95rem;
+            text-align: center;
+            color: var(--hk-text);
+            animation: pulse 2s infinite;
+            background: rgba(255,255,255,0.75);
+            padding: 10px 18px;
+            border-radius: 20px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="floating-background"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <main>
+        <header>
+            <h1>🎀 Felices 6 Meses 🎀</h1>
+            <div class="stats-container">
+                <div>Movimientos: <span id="moves-count">0</span></div>
+                <div>Tiempo: <span id="timer">00:00</span></div>
+            </div>
+        </header>
+
+        <div class="game-board" id="game-board"></div>
+
+        <button class="btn-restart" id="restart-btn">Reiniciar Juego 🌸</button>
+    </main>
+
+    <div class="end-screen" id="end-screen">
+        <h1 class="end-title">¡Ganaste! 💖</h1>
+        
+        <div class="envelope-wrapper" id="envelope">
+            <div class="envelope">
+                <div class="flap"></div>
+                <div class="envelope-front"></div>
+                <div class="seal">❤️</div>
+                
+                <div class="letter">
+                    <div class="letter-content">
+                        <h2>💖✨ 6 meses con mi sempai ✨💖</h2>
+                        <p>
+                            Amor ya llevamos 6 meses jsjs, ya 6 meses compartiendo lindos momentos, pasando bueno y malos momentos. Sobretodo muy bueno he lindos recuerdos que momentos que tenemos juntos.<br><br>
+                            Es muy hermoso compartir los mismo sentimientos con uno persona sobretodo con una chica tan hermosa y sentimental que eres.<br><br>
+                            Eres todo lo que he deseado yuriko, quiero seguir formando parte de tu vida, quiero seguir siendo tu novia he especial para ti.<br><br>
+                            <strong>Estos son los mejores 6 meses de mi vida 💕🎀</strong><br>
+                            <strong>Te amo ❤️</strong>
+                        </p>
+                        <div class="gift-box">
+                            <div class="gift-title">🎁 Ten un regalo sempai 🎀</div>
+                            <div class="scratch-container" id="scratch-container">
+                                <div class="gift-secret-wrapper">
+                                    <p class="gift-message" id="gift-secret-text" style="padding: 0;">EHEQC-HPM69-VHAJX</p>
+                                    <span class="gift-subtext">unos robux para ti</span>
+                                </div>
+                                <canvas id="scratch-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="instruction">Toca el sobre para abrirlo 💌</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const gameBoard = document.getElementById('game-board');
+            const movesCountEl = document.getElementById('moves-count');
+            const timerEl = document.getElementById('timer');
+            const restartBtn = document.getElementById('restart-btn');
+            const endScreen = document.getElementById('end-screen');
+            const envelope = document.getElementById('envelope');
+            const scratchContainer = document.getElementById('scratch-container');
+            const scratchCanvas = document.getElementById('scratch-canvas');
+            const scratchCtx = scratchCanvas.getContext('2d');
+            
+            const icons = ['🎀', '😻', '💖', '🌸', '🍰', '🍎', '🍓', '🧸'];
+            let cardsArray = [];
+            let firstCard = null;
+            let secondCard = null;
+            let lockBoard = false;
+            let matchedPairs = 0;
+            let moves = 0;
+            
+            let timeElapsed = 0;
+            let timerInterval;
+            let gameStarted = false;
+
+            // Variables de estado para raspa y gana
+            let isScratching = false;
+            let isGiftRevealed = false;
+            let scratchMoveCounter = 0;
+
+            function initScratchCard() {
+                isScratching = false;
+                isGiftRevealed = false;
+                scratchMoveCounter = 0;
+                scratchCanvas.classList.remove('revealed');
+                scratchCanvas.style.opacity = '1';
+                scratchCanvas.style.pointerEvents = 'auto';
+
+                const rect = scratchContainer.getBoundingClientRect();
+                const width = rect.width || 220;
+                const height = rect.height || 76;
+
+                scratchCanvas.width = width;
+                scratchCanvas.height = height;
+
+                scratchCtx.globalCompositeOperation = 'source-over';
+                scratchCtx.clearRect(0, 0, width, height);
+
+                // Degradado rosado/dorado brillante
+                const grad = scratchCtx.createLinearGradient(0, 0, width, height);
+                grad.addColorStop(0, '#ff85b3');
+                grad.addColorStop(0.5, '#ffd166');
+                grad.addColorStop(1, '#ff5c97');
+                scratchCtx.fillStyle = grad;
+                scratchCtx.fillRect(0, 0, width, height);
+
+                // Patrón decorativo sutil de destellos y moñitos
+                scratchCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+                scratchCtx.font = '14px sans-serif';
+                scratchCtx.textAlign = 'center';
+                scratchCtx.textBaseline = 'middle';
+                for (let x = 20; x < width; x += 42) {
+                    for (let y = 16; y < height; y += 32) {
+                        scratchCtx.fillText('✦', x, y);
+                    }
+                }
+
+                // Texto central de instrucción
+                scratchCtx.fillStyle = '#ffffff';
+                scratchCtx.shadowColor = 'rgba(180, 20, 80, 0.55)';
+                scratchCtx.shadowBlur = 4;
+                scratchCtx.font = 'bold 13px Quicksand, sans-serif';
+                scratchCtx.fillText('✨ Raspa aquí con tu dedo ✨', width / 2, height / 2);
+                scratchCtx.shadowBlur = 0;
+            }
+
+            function getScratchPos(e) {
+                const rect = scratchCanvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
+
+            function scratchAt(x, y) {
+                if (isGiftRevealed) return;
+                scratchCtx.globalCompositeOperation = 'destination-out';
+                scratchCtx.beginPath();
+                scratchCtx.arc(x, y, 18, 0, Math.PI * 2);
+                scratchCtx.fill();
+
+                scratchMoveCounter++;
+                if (scratchMoveCounter % 6 === 0) {
+                    checkScratchPercentage();
+                }
+            }
+
+            function checkScratchPercentage() {
+                if (isGiftRevealed) return;
+                const w = scratchCanvas.width;
+                const h = scratchCanvas.height;
+                if (!w || !h) return;
+
+                const imageData = scratchCtx.getImageData(0, 0, w, h).data;
+                let transparentPixels = 0;
+                const totalPixels = w * h;
+
+                for (let i = 3; i < imageData.length; i += 4) {
+                    if (imageData[i] < 128) {
+                        transparentPixels++;
+                    }
+                }
+
+                const percentage = (transparentPixels / totalPixels) * 100;
+                if (percentage >= 90) {
+                    revealGiftSecret();
+                }
+            }
+
+            function revealGiftSecret() {
+                if (isGiftRevealed) return;
+                isGiftRevealed = true;
+                scratchCanvas.classList.add('revealed');
+                launchGiftSparkles();
+            }
+
+            function launchGiftSparkles() {
+                const canvas = document.getElementById('confetti-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.style.display = 'block';
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const rect = scratchContainer.getBoundingClientRect();
+                const originX = rect.left + rect.width / 2;
+                const originY = rect.top + rect.height / 2;
+
+                const sparkles = [];
+                const colors = ['#ff1493', '#ffd700', '#ff69b4', '#ffffff', '#ffb6c1'];
+
+                for (let i = 0; i < 65; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 5 + 2;
+                    sparkles.push({
+                        x: originX,
+                        y: originY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 2,
+                        size: Math.random() * 5 + 3,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        alpha: 1
+                    });
+                }
+
+                function animateSparkles() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    let active = false;
+
+                    for (let i = 0; i < sparkles.length; i++) {
+                        const s = sparkles[i];
+                        if (s.alpha <= 0) continue;
+                        active = true;
+                        s.x += s.vx;
+                        s.y += s.vy;
+                        s.vy += 0.15;
+                        s.alpha -= 0.018;
+
+                        ctx.save();
+                        ctx.globalAlpha = Math.max(0, s.alpha);
+                        ctx.fillStyle = s.color;
+                        ctx.beginPath();
+                        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+                    }
+
+                    if (active) {
+                        requestAnimationFrame(animateSparkles);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        canvas.style.display = 'none';
+                    }
+                }
+
+                animateSparkles();
+            }
+
+            // Eventos táctiles y de ratón para raspa y gana
+            scratchCanvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                isScratching = true;
+                const pos = getScratchPos(e);
+                scratchAt(pos.x, pos.y);
+            }, { passive: false });
+
+            scratchCanvas.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (!isScratching) return;
+                const pos = getScratchPos(e);
+                scratchAt(pos.x, pos.y);
+            }, { passive: false });
+
+            scratchCanvas.addEventListener('touchend', (e) => {
+                e.stopPropagation();
+                isScratching = false;
+                checkScratchPercentage();
+            });
+
+            scratchCanvas.addEventListener('mousedown', (e) => {
+                e.stopPropagation();
+                isScratching = true;
+                const pos = getScratchPos(e);
+                scratchAt(pos.x, pos.y);
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isScratching) return;
+                const pos = getScratchPos(e);
+                scratchAt(pos.x, pos.y);
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isScratching) {
+                    isScratching = false;
+                    checkScratchPercentage();
+                }
+            });
+
+            function initGame() {
+                gameBoard.innerHTML = '';
+                matchedPairs = 0;
+                moves = 0;
+                movesCountEl.textContent = moves;
+                firstCard = null;
+                secondCard = null;
+                lockBoard = false;
+                gameStarted = false;
+                
+                clearInterval(timerInterval);
+                timeElapsed = 0;
+                updateTimerDisplay();
+
+                endScreen.classList.remove('visible');
+                envelope.classList.remove('open');
+                
+                const canvas = document.getElementById('confetti-canvas');
+                canvas.style.display = 'none';
+
+                cardsArray = [...icons, ...icons];
+                shuffleArray(cardsArray);
+
+                createCards();
+                initScratchCard();
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            function createCards() {
+                cardsArray.forEach((icon) => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.dataset.icon = icon; 
+
+                    const cardFront = document.createElement('div');
+                    cardFront.classList.add('card-face', 'card-front');
+                    cardFront.textContent = icon;
+
+                    const cardBack = document.createElement('div');
+                    cardBack.classList.add('card-face', 'card-back');
+
+                    card.appendChild(cardFront);
+                    card.appendChild(cardBack);
+                    
+                    card.addEventListener('click', flipCard);
+                    
+                    gameBoard.appendChild(card);
+                });
+            }
+
+            function startTimer() {
+                if (!gameStarted) {
+                    gameStarted = true;
+                    timerInterval = setInterval(() => {
+                        timeElapsed++;
+                        updateTimerDisplay();
+                    }, 1000);
+                }
+            }
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(timeElapsed / 60);
+                const seconds = timeElapsed % 60;
+                timerEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            function flipCard() {
+                startTimer();
+
+                if (lockBoard) return;
+                if (this === firstCard) return;
+                if (this.classList.contains('matched')) return;
+                if (this.classList.contains('flipped')) return;
+
+                this.classList.add('flipped');
+
+                if (!firstCard) {
+                    firstCard = this;
+                    return;
+                }
+
+                secondCard = this;
+                lockBoard = true; 
+                
+                moves++;
+                movesCountEl.textContent = moves;
+
+                checkForMatch();
+            }
+
+            function checkForMatch() {
+                const isMatch = firstCard.dataset.icon === secondCard.dataset.icon;
+
+                if (isMatch) {
+                    disableCards(); 
+                } else {
+                    unflipCards(); 
+                }
+            }
+
+            function disableCards() {
+                firstCard.classList.add('matched');
+                secondCard.classList.add('matched');
+                
+                matchedPairs++;
+                
+                if (matchedPairs === icons.length) {
+                    setTimeout(gameWon, 600); 
+                }
+
+                resetBoard();
+            }
+
+            function unflipCards() {
+                setTimeout(() => {
+                    firstCard.classList.remove('flipped');
+                    secondCard.classList.remove('flipped');
+                    resetBoard();
+                }, 1000);
+            }
+
+            function resetBoard() {
+                [firstCard, secondCard] = [null, null];
+                lockBoard = false;
+            }
+
+            function gameWon() {
+                clearInterval(timerInterval); 
+                startConfetti(); 
+                endScreen.classList.add('visible');
+            }
+
+            envelope.addEventListener('click', () => {
+                if (!envelope.classList.contains('open')) {
+                    envelope.classList.add('open');
+                    setTimeout(initScratchCard, 50);
+                }
+            });
+
+            restartBtn.addEventListener('click', initGame);
+
+            function startConfetti() {
+                const canvas = document.getElementById('confetti-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.style.display = 'block';
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                const particles = [];
+                const colors = ['#ffb6c1', '#ff1493', '#ff69b4', '#ffd700', '#ffffff'];
+
+                for (let i = 0; i < 150; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height - canvas.height,
+                        r: Math.random() * 6 + 2,
+                        d: Math.random() * 150,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        tilt: Math.floor(Math.random() * 10) - 10,
+                        tiltAngleInc: (Math.random() * 0.07) + 0.05,
+                        tiltAngle: 0
+                    });
+                }
+
+                let animationFrameId;
+
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    for (let i = 0; i < particles.length; i++) {
+                        const p = particles[i];
+                        ctx.beginPath();
+                        ctx.lineWidth = p.r;
+                        ctx.strokeStyle = p.color;
+                        ctx.moveTo(p.x + p.tilt + p.r, p.y);
+                        ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+                        ctx.stroke();
+                    }
+                    update();
+                    animationFrameId = requestAnimationFrame(draw);
+                }
+
+                let angle = 0;
+                function update() {
+                    angle += 0.01;
+                    for (let i = 0; i < particles.length; i++) {
+                        const p = particles[i];
+                        p.tiltAngle += p.tiltAngleInc;
+                        p.y += (Math.cos(angle + p.d) + 1 + p.r / 2) / 2;
+                        p.x += Math.sin(angle);
+                        p.tilt = Math.sin(p.tiltAngle) * 15;
+
+                        if (p.x > canvas.width + 20 || p.x < -20 || p.y > canvas.height) {
+                            p.x = Math.random() * canvas.width;
+                            p.y = -20;
+                        }
+                    }
+                }
+
+                draw();
+
+                setTimeout(() => {
+                    cancelAnimationFrame(animationFrameId);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.style.display = 'none';
+                }, 10000);
+            }
+
+            window.addEventListener('resize', () => {
+                const canvas = document.getElementById('confetti-canvas');
+                if (canvas.style.display === 'block') {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+            });
+
+            function createFloatingBackground() {
+                const bgContainer = document.getElementById('floating-background');
+                const heartSymbols = ['🤍', '🌸', '🎀', '✨'];
+                
+                for (let i = 0; i < 15; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('floating-heart');
+                    heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    
+                    heart.style.left = `${Math.random() * 100}vw`;
+                    heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                    heart.style.animationDelay = `${Math.random() * 5}s`;
+                    heart.style.fontSize = `${Math.random() * 1.5 + 1}rem`;
+                    
+                    bgContainer.appendChild(heart);
+                }
+            }
+
+            createFloatingBackground();
+            initGame();
+        });
+    </script>
+</body>
+</html>
